@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ConexaoPostgreJava {
 	
-	private final String url = "jdbc:postgresql://localhost/BDlivrariaUniversitaria";
+	 private final String url = "jdbc:postgresql://localhost/BDlivrariaUniversitaria";
 	 private final String user = "postgres";
 	 private final String password = "123456";
 	 Connection conn = null;
@@ -17,6 +17,9 @@ public class ConexaoPostgreJava {
 	 
 	 private static final String QUERY = "select * from autor where id_autor =?";
 	 private static final String SELECT_ALL_QUERY = "select * from autor";
+	 private static final String SELECT_ALL_QUERY_LIVRO = "select * from livro";
+	 private static final String SELECT_ALL_QUERY_CLIENTE ="select * from cliente";
+	 private static final String QUERY_PEDIDOS = "select * from cliente where nm_cliente = 'Gilberto Ribeiro de Queiroz' or id_cliente = '1'";
 	
 	 
 	 public Connection connect() {
@@ -43,46 +46,67 @@ public class ConexaoPostgreJava {
 	        //conn.close();
 	    }
 	 
-	    public void getAllUsers() {
+	    public void rLivro() {
 	        // Step 1: Establishing a Connection
 	        try {
 	            // Step 2:Create a statement using connection object
-	            PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ALL_QUERY);
+	            PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ALL_QUERY_LIVRO);
 	            System.out.println(preparedStatement);
 	            // Step 3: Execute the query or update query
 	            ResultSet rs = preparedStatement.executeQuery();
 
 	            // Step 4: Process the ResultSet object.
 	            while (rs.next()) {
-	                int id = rs.getInt("id_autor");
+	                int editar = rs.getInt("id_editar");
 	                String name_autor = rs.getString("nm_autor");
-	                System.out.println(id + " - " + name_autor);
+	                System.out.println(editar + " - " + name_autor);
 	            }
 	        } catch (SQLException e) {
 	            printSQLException(e);
 	        }
 	    }
 
-	    public void getUserById() {
+	    public void rCliente() {
 	    	// Step 1: Establishing a Connection
 	        try {
 	            // Step 2:Create a statement using connection object
-	            PreparedStatement preparedStatement = conn.prepareStatement(QUERY);
-	            // Step 3: Execute the query or update query
-	            preparedStatement.setInt(1, 5 );
+	            PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ALL_QUERY_CLIENTE);
 	            System.out.println(preparedStatement);
+	            // Step 3: Execute the query or update query
+	            //preparedStatement.setInt(1, 5);
+	            
 	            ResultSet rs = preparedStatement.executeQuery();
 	            // Step 4: Process the ResultSet object.
 	            // Step 4: Process the ResultSet object.
 	            while (rs.next()) {
-	                int id = rs.getInt("id_autor");
-	                String name_autor = rs.getString("nm_autor");
-	                System.out.println(id + " - " + name_autor);
+	                int idCliente = rs.getInt("id_cliente");
+	                String name_autor = rs.getString("nm_cliente");
+	                System.out.println(idCliente + " - " + name_autor);
 	            }
 	        } catch (SQLException e) {
 	            printSQLException(e);
 	        }
 	    }
+	    public void pCliente() {
+	        // Step 1: Establishing a Connection
+	        try {
+	            // Step 2:Create a statement using connection object
+	            PreparedStatement preparedStatement = conn.prepareStatement(QUERY_PEDIDOS);
+	            System.out.println(preparedStatement);
+	            // Step 3: Execute the query or update query
+	            ResultSet rs = preparedStatement.executeQuery();
+
+	            // Step 4: Process the ResultSet object.
+	            while (rs.next()) {
+	                int idCliente = rs.getInt("id_cliente");
+	                String name_cliente = rs.getString("nm_cliente");
+	                System.out.println(idCliente + " - " + name_cliente);
+	            }
+	        } catch (SQLException e) {
+	            printSQLException(e);
+	        }
+	    }
+	 
 	    
 	    public static void printSQLException(SQLException ex) {
 	            for (Throwable e: ex) {
@@ -103,58 +127,54 @@ public class ConexaoPostgreJava {
 	     * @param args the command line arguments
 	     */
 	    public static void main(String[] args) {
-
-	    	 int menu=0;
-		        Scanner ler = new Scanner(System.in);
-		        
-		        System.out.println("--- Selecione uma das opções abaixo ---");
-		        System.out.println("<1> Pesquisar Livro");
-		        System.out.println("<2> Pesquisar Cliente");
-		        System.out.println("<3> Pesquisar os Pedidos de um Cliente");
-		        System.out.println("<4> Sair");
-		        
-		        menu = ler.nextInt();
-		        switch (menu) {
-		            case 1:
-		            	VeiculoUtilitario veiculoutilitario = new VeiculoUtilitario("4x4","OFF Road",2);
-		            	System.out.println();
-		                
-		                break;
-
-		            case 2:
-		            	Motocicleta motocicleta = new Motocicleta(30,"Scooter");
-		            	System.out.println();
-		                break;
-		                
-		            case 3:
-		            	Van van = new Van(20,3);
-		            	System.out.println();
-		                break;
-		                
-		            case 4:
-		            	Caminhao caminhao = new Caminhao (1000,5);
-		            	System.out.println();
-		                break;
-
-		            case 5:
-		                System.out.println("SISTEMA ENCERRADO!");
-		    	     
-		                break;
-		            default:
-		            	System.out.println("ENTRAVA INVALIDA!");
-		            	
-		                break;
-		        }
-		    }
-		}
 	    	
+	    	Scanner ler = new Scanner (System.in);
 	    	ConexaoPostgreJava app = new ConexaoPostgreJava();
 	        app.connect();
-	        System.out.println("\nRealizando o select na tabela Autor");
+	        /*System.out.println("\nRealizando o select na tabela Autor");
 	        app.getAllUsers();
 	        System.out.println("\nRealizando o select na tabela Autor pelo ID");
-	        app.getUserById();
+	        app.getUserById();*/
 	        
+	        
+	        
+	        int menu=0;
+	        
+	        do {
+	        
+	        System.out.println("------------");
+	        System.out.println("    MENU    ");
+	        System.out.println("------------");
+	        System.out.println("1 - Pesquisar livro" + "\n2 - Pesquisar cliente" + "\n3 - Pesquisar os pedidos de um cliente" + "\n4 - Sair");
+	        System.out.println("------------");
+	        
+	        menu = ler.nextInt();
+	        
+	        switch (menu) {
+	        
+	        case 1:
+	        	System.out.println("\nSegue todos os livros listados: ");
+	        	app.rLivro();
+	        break;	
+	        	
+	        case 2:
+	        	System.out.println("\nSegue todos os clientes listados ");
+	        	app.rCliente();
+	        	break;
+	        	
+	        case 3:
+	        	System.out.println("\nDigite seu nome ou id ");
+	        	app.pCliente();
+	        	break;
+
+	        default:
+	        	System.out.println("Comando inválido. Tente novamente.");
+	        
+	        }	        
+	    }
+	        
+	        while (menu !=4) ; 
+
 	    }
 	
 	
